@@ -4,6 +4,7 @@ import SearchResults from '../SearchResults/SearchResults';
 import Playlist from '../Playlist/Playlist';
 import './App.css';
 
+const searchTerm = "";
 const playlistName = "Nas Playlist";
 
 const searchResults = [
@@ -38,8 +39,9 @@ const playlistTracks = [
 
 class App extends Component {
   state = {
-    playlistName,
+    searchTerm,
     searchResults,
+    playlistName,
     playlistTracks
   }
 
@@ -53,19 +55,21 @@ class App extends Component {
     this.setState({ playlistTracks });
   }
 
-  updatePlaylistName = playlistName => this.setState({ playlistName });
+  handleInputChange = name => value => this.setState({ [name]: value });
 
   render = () => (
     <div>
       <h1>steve<span className="highlight">ify</span></h1>
       <div className="App">
-        <SearchBar />
+        <SearchBar 
+          searchTerm={ this.state.searchTerm }
+          onTermChange={ this.handleInputChange("searchTerm") } />
         <div className="App-playlist">
           <SearchResults action={ this.addTrack } searchResults={ this.state.searchResults } />
           <Playlist 
             action={ this.removeTrack } 
-            onNameChange={ this.updatePlaylistName }
             playlistName={ this.state.playlistName } 
+            onNameChange={ this.handleInputChange("playlistName") }
             playlistTracks={ this.state.playlistTracks } />
         </div>
       </div>
