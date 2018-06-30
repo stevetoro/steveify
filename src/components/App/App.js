@@ -43,14 +43,24 @@ class App extends Component {
     playlistTracks
   }
 
+  addTrack = track => () => {
+    if (!this.state.playlistTracks.some(_track => _track.id == track.id))
+      this.setState({ playlistTracks: [...this.state.playlistTracks, track] });
+  }
+
+  removeTrack = track => () => {
+    const playlistTracks = this.state.playlistTracks.filter(_track => _track.id != track.id);
+    this.setState({ playlistTracks });
+  }
+
   render = () => (
     <div>
       <h1>steve<span className="highlight">ify</span></h1>
       <div className="App">
         <SearchBar />
         <div className="App-playlist">
-          <SearchResults searchResults={ this.state.searchResults } />
-          <Playlist playlistName={ this.state.playlistName } playlistTracks={ this.state.playlistTracks } />
+          <SearchResults action={ this.addTrack } searchResults={ this.state.searchResults } />
+          <Playlist action={ this.removeTrack } playlistName={ this.state.playlistName } playlistTracks={ this.state.playlistTracks } />
         </div>
       </div>
     </div>
