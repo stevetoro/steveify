@@ -2,11 +2,9 @@ import React , { Component } from 'react';
 import Track from '../Track/Track';
 import './Tracklist.css';
 
-const Tracklist = ({ removable }) => (
+const Tracklist = ({ tracks, removable }) => (
   <div className="TrackList">
-    <Track removable={ removable } />
-    <Track removable={ removable } />
-    <Track removable={ removable } />
+    { tracks.map(track => <Track key={ track.id } track={ track } removable={ removable } />) }
   </div>
 );
 

@@ -9,15 +9,18 @@ class Track extends Component {
     return <a className="Track-action">+</a>
   }
   
-  render = () => (
-    <div className="Track">
-      <div className="Track-information">
-        <h3>Track Name</h3>
-        <p>Track Artist | Track Album</p>
+  render = () => {
+    const { name, artist, album } = this.props.track;
+    return (
+      <div className="Track">
+        <div className="Track-information">
+          <h3>{ name }</h3>
+          <p>{ artist } | { album }</p>
+        </div>
+        { this.renderAction() }
       </div>
-      { this.renderAction() }
-    </div>
-  )
-}
+    );
+  }
+};
 
 export default Track;
