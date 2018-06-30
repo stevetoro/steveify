@@ -5,7 +5,7 @@ import './Playlist.css';
 const Playlist = () => (
   <div className="Playlist">
     <input value="New Playlist"/>
-    <Tracklist />
+    <Tracklist removable />
     <a className="Playlist-save">SAVE TO SPOTIFY</a>
   </div>
 );

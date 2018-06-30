@@ -2,11 +2,11 @@ import React , { Component } from 'react';
 import Track from '../Track/Track';
 import './Tracklist.css';
 
-const Tracklist = () => (
+const Tracklist = ({ removable }) => (
   <div className="TrackList">
-    <Track />
-    <Track />
-    <Track />
+    <Track removable={ removable } />
+    <Track removable={ removable } />
+    <Track removable={ removable } />
   </div>
 );
 
