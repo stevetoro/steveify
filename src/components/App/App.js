@@ -45,6 +45,10 @@ class App extends Component {
     playlistTracks
   }
 
+  search = () => {
+    console.log(this.state.searchTerm);
+  }
+
   addTrack = track => () => {
     if (!this.state.playlistTracks.some(_track => _track.id == track.id))
       this.setState({ playlistTracks: [...this.state.playlistTracks, track] });
@@ -63,7 +67,8 @@ class App extends Component {
       <div className="App">
         <SearchBar 
           searchTerm={ this.state.searchTerm }
-          onTermChange={ this.handleInputChange("searchTerm") } />
+          onTermChange={ this.handleInputChange("searchTerm") } 
+          onSearch={ this.search } />
         <div className="App-playlist">
           <SearchResults action={ this.addTrack } searchResults={ this.state.searchResults } />
           <Playlist 
