@@ -18,6 +18,12 @@ class App extends Component {
     this.setState({ searchResults });
   }
 
+  savePlaylist = async () => {
+    const uris = this.state.playlistTracks.map(track => track.uri);
+    await Spotify.savePlaylist(this.state.playlistName, uris);
+    this.setState({ playlistName: 'New Playlist', playlistTracks: [] });
+  }
+
   addTrack = track => () => {
     if (!this.state.playlistTracks.some(_track => _track.id == track.id))
       this.setState({ playlistTracks: [...this.state.playlistTracks, track] });
@@ -44,7 +50,8 @@ class App extends Component {
             action={ this.removeTrack } 
             playlistName={ this.state.playlistName } 
             onNameChange={ this.handleInputChange("playlistName") }
-            playlistTracks={ this.state.playlistTracks } />
+            playlistTracks={ this.state.playlistTracks }
+            onSave={ this.savePlaylist } />
         </div>
       </div>
     </div>

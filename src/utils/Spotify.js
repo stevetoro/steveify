@@ -1,5 +1,5 @@
 import { CLIENT_ID, REDIRECT_URI } from './config';
-const searchEndpoint = `https://api.spotify.com/v1/search?`;
+const spotifyEndpoint = 'https://api.spotify.com/v1/';
 
 let accessToken = '';
 
@@ -25,7 +25,7 @@ const Spotify = {
   search: async function (term) {
     const accessToken = this.getAccessToken();
     const headers = { Authorization: `Bearer ${accessToken}` };
-    const response = await fetch(`${searchEndpoint}type=track&q=${term}`, { headers });
+    const response = await fetch(`${spotifyEndpoint}search?type=track&q=${term}`, { headers });
     const json = await response.json();
 
     if (json.tracks) 
@@ -38,6 +38,28 @@ const Spotify = {
       }));
 
     return [];
+  },
+
+  savePlaylist: async function (name, uris) {
+    if (!name || !uris)
+      return;
+    
+    const accessToken = this.getAccessToken();
+    const headers = { Authorization: `Bearer ${accessToken}` };
+    const userResponse = await fetch(`${spotifyEndpoint}me`, { headers });
+    const userId = (await userResponse.json()).id;
+    const playlistResponse = await fetch(`${spotifyEndpoint}users/${userId}/playlists`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ name })
+    });
+    const playlistId = (await playlistResponse.json()).id;
+
+    return await fetch(`${spotifyEndpoint}users/${userId}/playlists/${playlistId}/tracks`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ uris })
+    });
   }
 };
 
