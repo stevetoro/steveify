@@ -1,57 +1,57 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import SearchBar from '../SearchBar/SearchBar';
 import SearchResults from '../SearchResults/SearchResults';
 import Playlist from '../Playlist/Playlist';
 import Spotify from '../../utils/Spotify';
 import './App.css';
 
-class App extends Component {
-  state = {
-    searchTerm: '',
-    searchResults: [],
-    playlistName: 'New Playlist',
-    playlistTracks: []
+const App = () => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [playlistName, setPlaylistName] = useState('New Playlist');
+  const [playlistTracks, setPlaylistTracks] = useState([]);
+
+  const search = async () => {
+    const searchResults = await Spotify.search(searchTerm);
+    setSearchResults(searchResults);
   }
 
-  search = async () => {
-    const searchResults = await Spotify.search(this.state.searchTerm);
-    this.setState({ searchResults });
+  const savePlaylist = async () => {
+    const uris = playlistTracks.map(track => track.uri);
+    await Spotify.savePlaylist(playlistName, uris);
+    setPlaylistName('New Playlist');
+    setPlaylistTracks([]);
   }
 
-  savePlaylist = async () => {
-    const uris = this.state.playlistTracks.map(track => track.uri);
-    await Spotify.savePlaylist(this.state.playlistName, uris);
-    this.setState({ playlistName: 'New Playlist', playlistTracks: [] });
+  const addTrack = track => () => {
+    if (!playlistTracks.some(_track => _track.id == track.id))
+      setPlaylistTracks(prevTracks => [...prevTracks, track]);
   }
 
-  addTrack = track => () => {
-    if (!this.state.playlistTracks.some(_track => _track.id == track.id))
-      this.setState({ playlistTracks: [...this.state.playlistTracks, track] });
+  const removeTrack = track => () => {
+    setPlaylistTracks(prevTracks => prevTracks.filter(_track => _track.id != track.id))
   }
 
-  removeTrack = track => () => {
-    const playlistTracks = this.state.playlistTracks.filter(_track => _track.id != track.id);
-    this.setState({ playlistTracks });
-  }
+  const handleSearchTermChange = searchTerm => setSearchTerm(searchTerm)
 
-  handleInputChange = name => value => this.setState({ [name]: value });
+  const handlePlaylistNameChange = playlistName => setPlaylistTracks(playlistName)
 
-  render = () => (
+  return (
     <div>
       <h1>steve<span className="highlight">ify</span></h1>
       <div className="App">
         <SearchBar 
-          searchTerm={ this.state.searchTerm }
-          onTermChange={ this.handleInputChange("searchTerm") } 
-          onSearch={ this.search } />
+          searchTerm={ searchTerm }
+          onTermChange={ handleSearchTermChange }
+          onSearch={ search } />
         <div className="App-playlist">
-          <SearchResults action={ this.addTrack } searchResults={ this.state.searchResults } />
+          <SearchResults action={ addTrack } searchResults={ searchResults } />
           <Playlist 
-            action={ this.removeTrack } 
-            playlistName={ this.state.playlistName } 
-            onNameChange={ this.handleInputChange("playlistName") }
-            playlistTracks={ this.state.playlistTracks }
-            onSave={ this.savePlaylist } />
+            action={ removeTrack } 
+            playlistName={ playlistName } 
+            onNameChange={ handlePlaylistNameChange }
+            playlistTracks={ playlistTracks }
+            onSave={ savePlaylist } />
         </div>
       </div>
     </div>
