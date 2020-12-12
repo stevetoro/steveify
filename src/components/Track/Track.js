@@ -3,6 +3,9 @@ import './Track.css';
 
 const Track = ({ track, action, removable }) => (
   <div className="Track">
+    <div className="Track-artwork">
+      <img src={ track.image } />
+    </div>
     <div className="Track-information">
       <h3>{ track.name }</h3>
       <p>{ track.artist } | { track.album }</p>
