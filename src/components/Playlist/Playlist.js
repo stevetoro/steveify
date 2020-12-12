@@ -7,8 +7,8 @@ const Playlist = ({ playlistTracks, action, saveSpotifyPlaylist }) => {
 
   const handlePlaylistNameChange = ({ target }) => setPlaylistName(target.value)
 
-  const handleSavePlaylist = () => {
-    saveSpotifyPlaylist(playlistName, playlistTracks);
+  const handleSavePlaylist = async () => {
+    await saveSpotifyPlaylist(playlistName, playlistTracks);
     setPlaylistName('New Playlist');
   }
 
