@@ -7,7 +7,6 @@ import './App.css';
 
 const App = () => {
   const [searchResults, setSearchResults] = useState([]);
-  const [playlistName, setPlaylistName] = useState('New Playlist');
   const [playlistTracks, setPlaylistTracks] = useState([]);
 
   const searchSpotify = async (searchTerm) => {
@@ -15,10 +14,9 @@ const App = () => {
     setSearchResults(searchResults);
   }
 
-  const savePlaylist = async () => {
-    const uris = playlistTracks.map(track => track.uri);
-    await Spotify.savePlaylist(playlistName, uris);
-    setPlaylistName('New Playlist');
+  const saveSpotifyPlaylist = async (name, tracks) => {
+    const uris = tracks.map(track => track.uri);
+    await Spotify.savePlaylist(name, uris);
     setPlaylistTracks([]);
   }
 
@@ -31,8 +29,6 @@ const App = () => {
     setPlaylistTracks(prevTracks => prevTracks.filter(_track => _track.id != track.id))
   }
 
-  const handlePlaylistNameChange = playlistName => setPlaylistTracks(playlistName)
-
   return (
     <div>
       <h1>steve<span className="highlight">ify</span></h1>
@@ -42,10 +38,8 @@ const App = () => {
           <SearchResults action={ addTrack } searchResults={ searchResults } />
           <Playlist 
             action={ removeTrack } 
-            playlistName={ playlistName } 
-            onNameChange={ handlePlaylistNameChange }
             playlistTracks={ playlistTracks }
-            onSave={ savePlaylist } />
+            saveSpotifyPlaylist={ saveSpotifyPlaylist } />
         </div>
       </div>
     </div>
