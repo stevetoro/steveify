@@ -6,12 +6,11 @@ import Spotify from '../../utils/Spotify';
 import './App.css';
 
 const App = () => {
-  const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [playlistName, setPlaylistName] = useState('New Playlist');
   const [playlistTracks, setPlaylistTracks] = useState([]);
 
-  const search = async () => {
+  const searchSpotify = async (searchTerm) => {
     const searchResults = await Spotify.search(searchTerm);
     setSearchResults(searchResults);
   }
@@ -32,18 +31,13 @@ const App = () => {
     setPlaylistTracks(prevTracks => prevTracks.filter(_track => _track.id != track.id))
   }
 
-  const handleSearchTermChange = searchTerm => setSearchTerm(searchTerm)
-
   const handlePlaylistNameChange = playlistName => setPlaylistTracks(playlistName)
 
   return (
     <div>
       <h1>steve<span className="highlight">ify</span></h1>
       <div className="App">
-        <SearchBar 
-          searchTerm={ searchTerm }
-          onTermChange={ handleSearchTermChange }
-          onSearch={ search } />
+        <SearchBar searchSpotify={ searchSpotify } />
         <div className="App-playlist">
           <SearchResults action={ addTrack } searchResults={ searchResults } />
           <Playlist 
